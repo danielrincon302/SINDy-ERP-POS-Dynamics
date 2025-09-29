@@ -44,7 +44,8 @@ Tabla 1. Variables de control.
 
 ## Modelo
 
-Ventas_{k+1} = 0.099 + 0.305 nVtaCO_k + 0.043 lVtaNT_k + 0.074 Ventas_k rPicoBMA_k + 0.720 Ventas_k xUnd_k - 0.819 Ventas_k nVtaCO_k - 0.135 Ventas_k uPicoBin_k - 0.069 rPicoBMA_k^2 + 0.230 rPicoBMA_k xUnd_k - 0.520 rPicoBMA_k nVtaCO_k + 0.097 rPicoBMA_k lVtaNT_k - 0.533 xUnd_k nVtaCO_k - 0.255 xUnd_k kVtaOCC_k - 0.139 xUnd_k uPicoBin_k + 0.263 nVtaCO_k^2 - 0.068 nVtaCO_k kVtaOCC_k + 0.199 nVtaCO_k lVtaNT_k + 0.303 nVtaCO_k uPicoBin_k + 0.272 kVtaOCC_k^2 + 0.072 kVtaOCC_k uPicoBin_k - 0.146 lVtaNT_k^2
+![Predicción de SINDy](Docs/Images/model.png)
+
 
 ## Gráfico de Predicción
 
