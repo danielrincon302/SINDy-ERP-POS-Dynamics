@@ -1,8 +1,6 @@
 # PREDICCIÓN DE VENTAS POR IDENTIFICACIÓN DISPERSA DE UN SISTEMA ERP A PARTIR DE DATOS DE UN MÓDULO POS
 
 **Autor:** CESAR DANIEL RINCÓN BRITO
-**Institución:** UNIVERSIDAD JAVERIANA CALI
-**Institución:** PROGRAMA DE MAESTRÍA EN INGENIERÍA
 
 ## OBJETIVO
 
@@ -59,9 +57,69 @@ Tabla 1. Variables de control.
 
 El modelo indica que las ventas futuras dependen no solo del nivel actual de ventas, sino también de múltiples factores externos que cambian con el tiempo.
 
+
+## SINDy
+
+![Predicción de SINDy](Docs/Images/SINDy_params.png)
+
+*** STLSQ *** (Sequentially Thresholded Least Squares).
+
+Calcula una regresión lineal para aproximar la dinámica con un umbral (threshold=0.05), los coeficientes más pequeños (menos influyentes) se eliminan, quedando solo los términos más importantes.
+
+![Predicción de SINDy](Docs/Images/eq003.png)
+
+de la eq. 3 SINDy busca un modelo sparsity 
+
+*** feature library *** ps.PolynomialLibrary(degree=2)
+Construye la matriz Θ(X,U), que contiene todas las funciones candidato (términos polinómicos hasta grado 2).
+
+![Predicción de SINDy](Docs/Images/eq004.png)
+
+donde SINDy busca la combinación de estas funciones que mejor represente la dinámica
+
+*** Discrete time *** (discrete_time=True)
+
+Indica que el sistema no está en forma continua (derivadas), sino en pasos discretos. En lugar de aproximar x˙(t) (derivadas), ajusta directamente la evolución paso a paso.
+
 ## Modelo
 
 ![Predicción de SINDy](Docs/Images/model.png)
+
+
+## Coeficientes
+
+![Predicción de SINDy](Docs/Images/FilterCoefSindy.png)
+
+Términos lineales más relevantes
+
+nVtaCO = +0.30 → Las ventas en la región Centro-Occidente tienen un efecto positivo directo sobre la variable dependiente «Ventas».
+
+Los demás términos lineales (rPicoBMA, xUnd, kVtaOCC, lVtaNT, uPicoBin) aparecen con coeficientes muy bajos o cercanos a cero → poca influencia directa.
+
+Interacciones fuertes con Ventas
+
+Ventas * xUnd = +0.72 → Las ventas pasadas multiplicadas por «unidades vendidas» son un predictor fuerte positivo: cuando ambas crecen juntas, las ventas futuras crecen.
+
+Ventas * nVtaCO = -0.82 → Relación fuerte pero negativa: un aumento simultáneo de ventas y ventas en Centro-Occidente puede estar indicando saturación del mercado o canibalización.
+
+Ventas * uPicoBin = -0.14 → Relación débilmente negativa.
+
+Interacciones entre variables de control
+
+rPicoBMA * xUnd = +0.23 → Si el pico de BMA aumenta y también suben las unidades vendidas, eso impulsa positivamente.
+
+rPicoBMA * nVtaCO = -0.52 → Interacción negativa fuerte, parece que ambas compiten.
+
+xUnd * nVtaCO = -0.53 → También fuerte y negativa.
+
+nVtaCO * lVtaNT = +0.30 y kVtaOCC * ^2 = +0.27 → Estas aparecen como efectos positivos no lineales.
+
+Términos cuadráticos
+
+nVtaNT^2 = -0.15 → Incrementos grandes en ventas en Norte tienen un efecto decreciente (posible saturación).
+
+kVtaOCC^2 = +0.27 → Crecimiento acelerado: ventas en Occidente se comportan de manera no lineal expansiva.
+
 
 ## Gráfico de Predicción
 
