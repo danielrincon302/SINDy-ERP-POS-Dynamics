@@ -82,10 +82,16 @@ donde SINDy busca la combinación de estas funciones que mejor represente la din
 
 Indica que el sistema no está en forma continua (derivadas), sino en pasos discretos. En lugar de aproximar x˙(t) (derivadas), ajusta directamente la evolución paso a paso.
 
+
+## Data
+
+![Predicción de SINDy](Docs/Images/data.png)
+
+La gráfica ilustra cómo el modelo se entreentrenará con el 90% de los datos y luego se evalúa en el 10% restante. Las 6 trayectorias representan el comportamiento de las variables clave de control, mostrando si el modelo logra seguir sus tendencias y variaciones fuera del set de entrenamiento.
+
 ## Modelo
 
 ![Predicción de SINDy](Docs/Images/model.png)
-
 
 ## Coeficientes
 

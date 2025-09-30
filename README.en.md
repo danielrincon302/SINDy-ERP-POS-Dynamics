@@ -81,6 +81,12 @@ where SINDy seeks the combination of these functions that best represents the dy
 
 Indicates that the system is not in continuous form (derivatives), but in discrete steps. Instead of approximating x˙(t) (derivatives), it directly adjusts the step-by-step evolution.
 
+## Data
+
+![Predicción de SINDy](Docs/Images/data.png)
+
+The graph illustrates how the model will be trained on 90% of the data and then evaluated on the remaining 10%. The six trajectories represent the behavior of the key control variables, showing whether the model can track their trends and variations outside the training set.
+
 ## Model
 
 ![SINDy Prediction](Docs/Images/model.png)
