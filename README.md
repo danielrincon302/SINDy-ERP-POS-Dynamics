@@ -19,6 +19,7 @@ En el caso de ventas, esto corresponde a registros diarios, semanales o mensuale
 
 En el contexto de ventas discretas representa un mapa dinámico estocástico no lineal, capaz de capturar patrones complejos y de generar pronósticos considerando tanto dependencias pasadas como fluctuaciones aleatorias. Es útil cuando los datos son observaciones discretas (ventas diarias, series temporales, sensores con sampling, etc.) en lugar de mediciones continuas.
 
+[Introducción SINDy](readme.sindy.md)
 
 ## Descripción del Proyecto
 
@@ -90,36 +91,35 @@ Indica que el sistema no está en forma continua (derivadas), sino en pasos disc
 
 ![Predicción de SINDy](Docs/Images/FilterCoefSindy.png)
 
-Términos lineales más relevantes
+*** Términos lineales más relevantes ***
 
 nVtaCO = +0.30 → Las ventas en la región Centro-Occidente tienen un efecto positivo directo sobre la variable dependiente «Ventas».
 
 Los demás términos lineales (rPicoBMA, xUnd, kVtaOCC, lVtaNT, uPicoBin) aparecen con coeficientes muy bajos o cercanos a cero → poca influencia directa.
 
-Interacciones fuertes con Ventas
+*** Interacciones fuertes con Ventas ***
 
 Ventas * xUnd = +0.72 → Las ventas pasadas multiplicadas por «unidades vendidas» son un predictor fuerte positivo: cuando ambas crecen juntas, las ventas futuras crecen.
 
-Ventas * nVtaCO = -0.82 → Relación fuerte pero negativa: un aumento simultáneo de ventas y ventas en Centro-Occidente puede estar indicando saturación del mercado o canibalización.
+Ventas * nVtaCO = -0.82 → Relación fuerte pero negativa: un aumento simultáneo de ventas y ventas en Centro-Occidente.
 
 Ventas * uPicoBin = -0.14 → Relación débilmente negativa.
 
-Interacciones entre variables de control
+*** Interacciones entre variables de control ***
 
-rPicoBMA * xUnd = +0.23 → Si el pico de BMA aumenta y también suben las unidades vendidas, eso impulsa positivamente.
+rPicoBMA * xUnd = +0.23 → Si el pico de BMA aumenta y también suben las unidades vendidas, impulsa positivamente.
 
-rPicoBMA * nVtaCO = -0.52 → Interacción negativa fuerte, parece que ambas compiten.
+rPicoBMA * nVtaCO = -0.52 → Interacción negativa fuerte.
 
 xUnd * nVtaCO = -0.53 → También fuerte y negativa.
 
 nVtaCO * lVtaNT = +0.30 y kVtaOCC * ^2 = +0.27 → Estas aparecen como efectos positivos no lineales.
 
-Términos cuadráticos
+*** Términos cuadráticos ***
 
-nVtaNT^2 = -0.15 → Incrementos grandes en ventas en Norte tienen un efecto decreciente (posible saturación).
+nVtaNT^2 = -0.15 → Incrementos grandes en ventas en Norte tienen un efecto decreciente.
 
 kVtaOCC^2 = +0.27 → Crecimiento acelerado: ventas en Occidente se comportan de manera no lineal expansiva.
-
 
 ## Gráfico de Predicción
 
