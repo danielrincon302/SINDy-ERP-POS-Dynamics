@@ -14,9 +14,12 @@ La metodología SINDy (Sparse Identification of Nonlinear Dynamics) se ha conver
 
 En SINDy el sistema dinámico se considera un mapa. En lugar de predecir derivadas, las funciones del lado derecho avanzan el sistema un paso de tiempo.
 
-\( x_{k+1} = f(x_k) \)
+![Predicción de SINDy](Docs/Images/eq001.png)
 
-Es útil cuando los datos son observaciones discretas (ventas diarias, series temporales, sensores con sampling, etc.) en lugar de mediciones continuas.
+La notación xk+1 indica que el sistema evoluciona en pasos de tiempo discretos. Es decir, se observan estados en k=0,1,2,… en lugar de un tiempo continuo.
+En el caso de ventas, esto corresponde a registros diarios, semanales o mensuales, donde cada observación depende de la anterior.
+
+En el contexto de ventas discretas representa un mapa dinámico estocástico no lineal, capaz de capturar patrones complejos y de generar pronósticos considerando tanto dependencias pasadas como fluctuaciones aleatorias. Es útil cuando los datos son observaciones discretas (ventas diarias, series temporales, sensores con sampling, etc.) en lugar de mediciones continuas.
 
 
 ## Descripción del Proyecto
@@ -42,10 +45,23 @@ Este proyecto utiliza el método SINDy (Sparse Identification of Nonlinear Dynam
 
 Tabla 1. Variables de control.
 
+
+## Variables de control
+
+1. \(u_{1r,k}\): Pico categórica (Alto - Medio - Bajo) Promociones, Fechas especiales.  
+2. \(u_{2x,k}\): Unidades Kit
+3. \(u_{3n,k}\): Ventas centro oriente 
+4. \(u_{4k,k}\): Ventas occidente  
+5. \(u_{5l,k}\): Ventas norte 
+6. \(u_{6u,k}\): Pico 1/0 
+
+![Predicción de SINDy](Docs/Images/eq002.png)
+
+El modelo indica que las ventas futuras dependen no solo del nivel actual de ventas, sino también de múltiples factores externos que cambian con el tiempo.
+
 ## Modelo
 
 ![Predicción de SINDy](Docs/Images/model.png)
-
 
 ## Gráfico de Predicción
 
