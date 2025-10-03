@@ -97,35 +97,27 @@ La gráfica ilustra cómo el modelo se entreentrenará con el 90% de los datos y
 
 ![Predicción de SINDy](Docs/Images/FilterCoefSindy.png)
 
-*** Términos lineales más relevantes ***
 
-nVtaCO = +0.30 → Las ventas en la región Centro-Occidente tienen un efecto positivo directo sobre la variable dependiente «Ventas».
+### Interpretación por tipo de término
 
-Los demás términos lineales (rPicoBMA, xUnd, kVtaOCC, lVtaNT, uPicoBin) aparecen con coeficientes muy bajos o cercanos a cero → poca influencia directa.
+1. **Constante (1 → 0.17)**
 
-*** Interacciones fuertes con Ventas ***
+   * El modelo predice un “nivel base” de ventas independiente de las variables.
 
-Ventas * xUnd = +0.72 → Las ventas pasadas multiplicadas por «unidades vendidas» son un predictor fuerte positivo: cuando ambas crecen juntas, las ventas futuras crecen.
+2. **Términos lineales (Ventas, rPicoBMA, xUnd, kVtaOCC, lVtaNT, etc.)**
 
-Ventas * nVtaCO = -0.82 → Relación fuerte pero negativa: un aumento simultáneo de ventas y ventas en Centro-Occidente.
+   * Ejemplo: `Ventas` (0.65) significa que el valor de ventas pasadas influye **positivamente** en las futuras.
+   * `rPicoBMA` (–0.72) impacta de manera **negativa**: cuando aumenta este indicador, las ventas tienden a bajar.
 
-Ventas * uPicoBin = -0.14 → Relación débilmente negativa.
+3. **Cuadráticos (Ventas², nVtaCO², etc.)**
 
-*** Interacciones entre variables de control ***
+   * `Ventas²` (0.91) y `nVtaCO²` (1.11) muestran que hay **efectos no lineales fuertes**, donde el crecimiento no es proporcional.
+   * Estos términos indican que la relación entre variables y ventas **no es lineal simple**, sino que hay aceleraciones o saturaciones.
 
-rPicoBMA * xUnd = +0.23 → Si el pico de BMA aumenta y también suben las unidades vendidas, impulsa positivamente.
+4. **Términos cruzados (interacciones, ej. Ventas × rPicoBMA, xUnd × nVtaCO, etc.)**
 
-rPicoBMA * nVtaCO = -0.52 → Interacción negativa fuerte.
-
-xUnd * nVtaCO = -0.53 → También fuerte y negativa.
-
-nVtaCO * lVtaNT = +0.30 y kVtaOCC * ^2 = +0.27 → Estas aparecen como efectos positivos no lineales.
-
-*** Términos cuadráticos ***
-
-nVtaNT^2 = -0.15 → Incrementos grandes en ventas en Norte tienen un efecto decreciente.
-
-kVtaOCC^2 = +0.27 → Crecimiento acelerado: ventas en Occidente se comportan de manera no lineal expansiva.
+   * `Ventas × kVtaOCC` (–0.94) muestra que la combinación entre ventas previas y occidente reduce el valor futuro → interacción negativa.
+   * `xUnd × kVtaOCC` (0.45) es positiva: cuando ambas crecen, se refuerzan.
 
 ## Gráfico de Predicción
 
