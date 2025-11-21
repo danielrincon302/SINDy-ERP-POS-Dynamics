@@ -1,0 +1,10 @@
+cff-version: 1.1.0
+message: "If you use this paper, please cite it as below."
+authors:
+- family-names: Cesar Daniel
+  given-names: Rincón Brito
+orcid: https://orcid.org/0009-0007-9999-6889
+title:danielrincon302/SINDy-ERP-POS-Dynamics: 1.0.0
+version: 1.0.0
+date-released: 2025-11-08
+                               
