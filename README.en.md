@@ -179,48 +179,51 @@ Table 3. Control variables for model v2.
 
 ### SINDy Model Equation v2
 
-The SINDy model identified the following discrete dynamic equation with **31 active terms** (threshold = 0.05):
+The SINDy model identified the following discrete dynamic equation with **34 active terms** (threshold = 0.01, alpha = 0.05):
 
 ```
-y(k+1) = 0.1636 - 0.1417·y - 0.4939·r + 0.5987·x - 0.1583·n - 0.1758·k + 0.1029·l
-         - 0.2581·y² + 0.6257·y·r + 0.6399·y·x - 0.1679·y·n - 0.3458·y·k
-         - 0.0871·y·l + 0.2174·r² - 0.5765·r·x + 0.3080·r·n + 0.4149·r·k
-         - 0.1191·r·l + 0.0935·x² - 0.4581·x·n - 0.0748·x·k + 0.2174·x·l
-         + 0.2032·n² + 0.1849·n·k - 0.0938·n·l + 0.1413·k² - 0.0568·k·l
-         - 0.0649·l² + additional terms
+y[k+1] = 0.006
+       + 0.529·y[k]
+       - 0.199·r[k] + 0.674·x[k] - 0.071·n[k] - 0.107·k[k] + 0.036·l[k] - 0.009·u[k]
+       + 1.103·y[k]²
+       - 0.482·y[k]·r[k] - 0.198·y[k]·x[k] - 2.742·y[k]·k[k] - 0.221·y[k]·l[k] - 0.028·y[k]·u[k]
+       + 0.294·r[k]² - 0.259·r[k]·x[k] + 0.397·r[k]·n[k] + 0.992·r[k]·k[k] + 0.121·r[k]·l[k]
+       - 1.728·x[k]² + 0.217·x[k]·n[k] + 0.815·x[k]·k[k] + 0.261·x[k]·l[k] - 0.117·x[k]·u[k]
+       + 0.735·n[k]² - 1.260·n[k]·k[k] + 0.107·n[k]·u[k]
+       + 0.664·k[k]² + 0.330·k[k]·l[k] + 0.086·k[k]·u[k]
+       - 0.076·l[k]²
 ```
 
 ### Performance Metrics
 
-| Set | Records | R² | RMSE | MAE | MAPE |
-|-----|---------|------|--------|-------|-------|
-| **Train** | 975 | 0.3850 | 0.0630 | 0.0472 | - |
-| **Validation** | 109 | 0.6728 | 0.0811 | 0.0565 | 50.60% |
-| **Test (2025)** | 109 | 0.6539 | 0.0893 | 0.0613 | 48.32% |
+| Set | Records | R² |
+|-----|---------|------|
+| **Validation** | 109 | 0.7006 |
+| **Test (2025)** | 109 | 0.6691 |
 
 Table 4. Performance metrics for model v2.
 
 **Pearson Correlation:**
-- Validation: r = 0.8279 (p-value < 0.001)
-- Test: r = 0.8132 (p-value < 0.001)
+- Validation: r = 0.8370 (p-value < 0.001)
+- Test: r = 0.8180 (p-value < 0.001)
 
 ### Graphical Results
 
-#### Train, Validation and Test Comparison
+#### Validation and Test Comparison
 
-![Train-Val-Test Results](Docs/Images/v2/resultados_train_test_val.png)
+![Val-Test Results](Docs/Images/v2/resultados_train_test_val.png)
 
-*Figure 1. Time series and scatter plots for training (R²=0.3850), validation (R²=0.6728) and test (R²=0.6539) sets.*
+*Figure 1. Time series and scatter plots for validation (R²=0.7006) and test (R²=0.6691) sets.*
 
 #### Prediction vs Real in Test (2025)
 
 ![Test Prediction vs Real](Docs/Images/v2/test_prediction_vs_real.png)
 
-*Figure 2. Detailed comparison between real values and SINDy model predictions for the test set (2025 period). Left: time series. Right: scatter plot with correlation r=0.8132.*
+*Figure 2. Detailed comparison between real values and SINDy model predictions for the test set (2025 period). Left: time series. Right: scatter plot with correlation r=0.8180.*
 
 ### Conclusions
 
-1. **Generalization Capability**: The SINDy model demonstrates good generalization capability, maintaining an R² of 0.6539 on the test set (2025 data) that was not seen during training.
+1. **Generalization Capability**: The SINDy model demonstrates good generalization capability, maintaining an R² of 0.6691 on the test set (2025 data) that was not seen during training.
 
 2. **Significant Correlation**: Pearson correlations above 0.81 in validation and test indicate a strong and statistically significant relationship between predictions and actual values.
 
