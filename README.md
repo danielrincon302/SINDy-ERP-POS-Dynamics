@@ -141,3 +141,88 @@ La gráfica ilustra cómo el modelo se entreentrenará con el 90% de los datos y
 -   `ERP-POS-Data/Sales-CSV970-1093.csv`: Datos de ventas utilizados para el entrenamiento y la validación.
 -   `Matrix-Correlation/correlation_matrix.ipynb`: Notebook para analizar la correlación de variables.
 -   `Test-Model/test_model.ipynb`: Notebook para pruebas adicionales del modelo.
+
+---
+
+## Modelo v2: Entrenamiento, Validación y Prueba
+
+### Dataset: Sales-CSV-1201-Train-Value-Test.csv
+
+División del dataset con **1201 registros** para entrenamiento, validación y prueba independiente:
+
+| Conjunto | Registros | Índices | Período |
+|----------|-----------|---------|---------|
+| **Train** | 976 | 0-975 | 2022-01-02 a 2024-09-06 |
+| **Validación** | 109 | 976-1084 | 2024-09-07 a 2024-12-24 |
+| **Test** | 109 | 1092-1200 | 2025-09-07 a 2025-12-24 |
+
+Tabla 2. División del dataset para entrenamiento, validación y prueba.
+
+### Variables de Control v2
+
+| Variable | Dataset | Columna | Descripción |
+|----------|---------|---------|-------------|
+| y (Predicción) | TotalVentaNeta | Total venta neta | Variable objetivo a predecir |
+| r | Pico_B_M_A | Pico categórica | Alto - Medio - Bajo (0.33, 0.66, 1.0) |
+| x | UnidadesKit | Unidades vendidas | Cantidad de kits vendidos |
+| n | VentasCENTROORIENTE | Ventas región CO | Ventas en centro oriente |
+| k | VentasOCCIDENTE | Ventas región OC | Ventas en occidente |
+| l | VentasNORTE | Ventas región NT | Ventas en norte |
+| u | EsFechaEspecial | Fecha especial | Indicador binario (0/1) |
+
+Tabla 3. Variables de control modelo v2.
+
+### Ecuación del Modelo SINDy v2
+
+El modelo SINDy identificó la siguiente ecuación dinámica discreta con **31 términos activos** (threshold = 0.05):
+
+```
+y(k+1) = 0.1636 - 0.1417·y - 0.4939·r + 0.5987·x - 0.1583·n - 0.1758·k + 0.1029·l
+         - 0.2581·y² + 0.6257·y·r + 0.6399·y·x - 0.1679·y·n - 0.3458·y·k
+         - 0.0871·y·l + 0.2174·r² - 0.5765·r·x + 0.3080·r·n + 0.4149·r·k
+         - 0.1191·r·l + 0.0935·x² - 0.4581·x·n - 0.0748·x·k + 0.2174·x·l
+         + 0.2032·n² + 0.1849·n·k - 0.0938·n·l + 0.1413·k² - 0.0568·k·l
+         - 0.0649·l² + términos adicionales
+```
+
+### Métricas de Rendimiento
+
+| Conjunto | Registros | R² | RMSE | MAE | MAPE |
+|----------|-----------|------|--------|-------|-------|
+| **Train** | 975 | 0.3850 | 0.0630 | 0.0472 | - |
+| **Validación** | 109 | 0.6728 | 0.0811 | 0.0565 | 50.60% |
+| **Test (2025)** | 109 | 0.6539 | 0.0893 | 0.0613 | 48.32% |
+
+Tabla 4. Métricas de rendimiento del modelo v2.
+
+**Correlación de Pearson:**
+- Validación: r = 0.8279 (p-value < 0.001)
+- Test: r = 0.8132 (p-value < 0.001)
+
+### Resultados Gráficos
+
+#### Comparación Train, Validación y Test
+
+![Resultados Train-Val-Test](Docs/Images/v2/resultados_train_test_val.png)
+
+*Figura 1. Series temporales y gráficos de dispersión para los conjuntos de entrenamiento (R²=0.3850), validación (R²=0.6728) y test (R²=0.6539).*
+
+#### Predicción vs Real en Test (2025)
+
+![Test Predicción vs Real](Docs/Images/v2/test_prediction_vs_real.png)
+
+*Figura 2. Comparación detallada entre valores reales y predicciones del modelo SINDy para el conjunto de test (período 2025). Izquierda: serie temporal. Derecha: gráfico de dispersión con correlación r=0.8132.*
+
+### Conclusiones
+
+1. **Capacidad de Generalización**: El modelo SINDy demuestra buena capacidad de generalización, manteniendo un R² de 0.6539 en el conjunto de test (datos de 2025) que no fueron vistos durante el entrenamiento.
+
+2. **Correlación Significativa**: Las correlaciones de Pearson superiores a 0.81 en validación y test indican una relación fuerte y estadísticamente significativa entre las predicciones y los valores reales.
+
+3. **Interpretabilidad**: A diferencia de modelos de caja negra, SINDy proporciona una ecuación explícita que permite entender cómo las variables de control influyen en las ventas futuras.
+
+4. **Interacciones No Lineales**: El modelo captura interacciones cuadráticas y cruzadas entre variables (como y·r, y·x, r·n), revelando relaciones complejas en la dinámica de ventas.
+
+5. **Aplicabilidad Práctica**: Con un MAPE cercano al 48% en test, el modelo es útil para identificar tendencias y patrones, aunque las predicciones puntuales tienen margen de mejora debido a la naturaleza estocástica de las ventas.
+
+*Nota: Para reproducir estos resultados, ejecute el notebook `SINDY-discrete-stocastic-sales/Sindy-discrete-stocastic-sales-erp(Train-Test-Val).ipynb` con el dataset `ERP-POS-Data/Sales-CSV-1201-Train-Value-Test.csv`.*

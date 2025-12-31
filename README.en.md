@@ -146,3 +146,88 @@ kVtaOCC^2 = +0.27 → Accelerated growth: sales in the West behave in a non-line
 -   `ERP-POS-Data/Sales-CSV970-1093.csv`: Sales data used for training and validation.
 -   `Matrix-Correlation/correlation_matrix.ipynb`: Notebook to analyze variable correlation.
 -   `Test-Model/test_model.ipynb`: Notebook for additional model testing.
+
+---
+
+## Model v2: Training, Validation and Test
+
+### Dataset: Sales-CSV-1201-Train-Value-Test.csv
+
+Dataset split with **1201 records** for training, validation and independent testing:
+
+| Set | Records | Indices | Period |
+|-----|---------|---------|--------|
+| **Train** | 976 | 0-975 | 2022-01-02 to 2024-09-06 |
+| **Validation** | 109 | 976-1084 | 2024-09-07 to 2024-12-24 |
+| **Test** | 109 | 1092-1200 | 2025-09-07 to 2025-12-24 |
+
+Table 2. Dataset split for training, validation and testing.
+
+### Control Variables v2
+
+| Variable | Dataset | Column | Description |
+|----------|---------|--------|-------------|
+| y (Prediction) | TotalVentaNeta | Total net sales | Target variable to predict |
+| r | Pico_B_M_A | Categorical peak | High - Medium - Low (0.33, 0.66, 1.0) |
+| x | UnidadesKit | Units sold | Number of kits sold |
+| n | VentasCENTROORIENTE | CO region sales | Center-East sales |
+| k | VentasOCCIDENTE | OC region sales | West sales |
+| l | VentasNORTE | NT region sales | North sales |
+| u | EsFechaEspecial | Special date | Binary indicator (0/1) |
+
+Table 3. Control variables for model v2.
+
+### SINDy Model Equation v2
+
+The SINDy model identified the following discrete dynamic equation with **31 active terms** (threshold = 0.05):
+
+```
+y(k+1) = 0.1636 - 0.1417·y - 0.4939·r + 0.5987·x - 0.1583·n - 0.1758·k + 0.1029·l
+         - 0.2581·y² + 0.6257·y·r + 0.6399·y·x - 0.1679·y·n - 0.3458·y·k
+         - 0.0871·y·l + 0.2174·r² - 0.5765·r·x + 0.3080·r·n + 0.4149·r·k
+         - 0.1191·r·l + 0.0935·x² - 0.4581·x·n - 0.0748·x·k + 0.2174·x·l
+         + 0.2032·n² + 0.1849·n·k - 0.0938·n·l + 0.1413·k² - 0.0568·k·l
+         - 0.0649·l² + additional terms
+```
+
+### Performance Metrics
+
+| Set | Records | R² | RMSE | MAE | MAPE |
+|-----|---------|------|--------|-------|-------|
+| **Train** | 975 | 0.3850 | 0.0630 | 0.0472 | - |
+| **Validation** | 109 | 0.6728 | 0.0811 | 0.0565 | 50.60% |
+| **Test (2025)** | 109 | 0.6539 | 0.0893 | 0.0613 | 48.32% |
+
+Table 4. Performance metrics for model v2.
+
+**Pearson Correlation:**
+- Validation: r = 0.8279 (p-value < 0.001)
+- Test: r = 0.8132 (p-value < 0.001)
+
+### Graphical Results
+
+#### Train, Validation and Test Comparison
+
+![Train-Val-Test Results](Docs/Images/v2/resultados_train_test_val.png)
+
+*Figure 1. Time series and scatter plots for training (R²=0.3850), validation (R²=0.6728) and test (R²=0.6539) sets.*
+
+#### Prediction vs Real in Test (2025)
+
+![Test Prediction vs Real](Docs/Images/v2/test_prediction_vs_real.png)
+
+*Figure 2. Detailed comparison between real values and SINDy model predictions for the test set (2025 period). Left: time series. Right: scatter plot with correlation r=0.8132.*
+
+### Conclusions
+
+1. **Generalization Capability**: The SINDy model demonstrates good generalization capability, maintaining an R² of 0.6539 on the test set (2025 data) that was not seen during training.
+
+2. **Significant Correlation**: Pearson correlations above 0.81 in validation and test indicate a strong and statistically significant relationship between predictions and actual values.
+
+3. **Interpretability**: Unlike black-box models, SINDy provides an explicit equation that allows understanding how control variables influence future sales.
+
+4. **Nonlinear Interactions**: The model captures quadratic and cross-interactions between variables (such as y·r, y·x, r·n), revealing complex relationships in sales dynamics.
+
+5. **Practical Applicability**: With a MAPE close to 48% on test, the model is useful for identifying trends and patterns, although point predictions have room for improvement due to the stochastic nature of sales.
+
+*Note: To reproduce these results, run the notebook `SINDY-discrete-stocastic-sales/Sindy-discrete-stocastic-sales-erp(Train-Test-Val).ipynb` with the dataset `ERP-POS-Data/Sales-CSV-1201-Train-Value-Test.csv`.*
