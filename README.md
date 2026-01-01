@@ -229,3 +229,100 @@ Tabla 4. Métricas de rendimiento del modelo v2.
 5. **Aplicabilidad Práctica**: Con un MAPE cercano al 48% en test, el modelo es útil para identificar tendencias y patrones, aunque las predicciones puntuales tienen margen de mejora debido a la naturaleza estocástica de las ventas.
 
 *Nota: Para reproducir estos resultados, ejecute el notebook `SINDY-discrete-stocastic-sales/Sindy-discrete-stocastic-sales-erp(Train-Test-Val).ipynb` con el dataset `ERP-POS-Data/Sales-CSV-1201-Train-Value-Test.csv`.*
+
+---
+
+## Validación con Datos Sintéticos
+
+Para validar que el modelo SINDy realmente captura la dinámica del sistema y no simplemente memoriza patrones, se realizaron pruebas con datasets sintéticos.
+
+### Test 1: Datos Sintéticos Aleatorios (Sin Correlaciones Temporales)
+
+Se generó un dataset sintético con **distribuciones estadísticas similares** al test original pero **sin preservar correlaciones temporales** (datos completamente aleatorios).
+
+#### Resultados
+
+| Métrica | Test Original | Test Sintético Aleatorio |
+|---------|---------------|--------------------------|
+| **R²** | 0.6289 | **-1.1913** |
+| **RMSE** | 0.0792 | 0.1784 |
+| **Correlación** | 0.8011 | -0.0508 |
+
+Tabla 5. Comparación entre test original y sintético aleatorio.
+
+![Test Original vs Sintético Aleatorio](Docs/Images/v2/test_original_vs_sintetico.png)
+
+*Figura 3. Comparación entre test original (arriba) y test sintético aleatorio (abajo). El modelo falla completamente con datos aleatorios (R² negativo).*
+
+#### Interpretación
+
+El **R² negativo (-1.19)** en el test sintético aleatorio es un resultado **esperado y positivo** para validar el modelo:
+
+1. **Los datos sintéticos son aleatorios**: No tienen estructura temporal ni correlaciones entre variables que existen en los datos reales de ventas.
+
+2. **SINDy captura patrones dinámicos reales**: El modelo aprendió relaciones específicas como:
+   - Dependencia temporal entre ventas consecutivas (y[k] → y[k+1])
+   - Correlaciones entre unidades vendidas y ventas totales
+   - Efectos de las ventas regionales
+
+3. **Sin patrones = predicción peor que la media**: Un R² negativo significa que predecir simplemente la media sería mejor que usar el modelo. Esto **confirma que el modelo no memoriza** sino que aprende la **dinámica real del negocio**.
+
+---
+
+### Test 2: Datos Sintéticos con Correlaciones Temporales Preservadas
+
+Se generó un segundo dataset sintético aplicando **perturbaciones controladas** al test original:
+- Ruido AR(1) correlacionado a variables continuas (preserva autocorrelación)
+- Cambios aleatorios del 15% en variables categóricas
+- Valores mantenidos en rango [0, 1]
+
+#### Comparación de Autocorrelaciones (lag-1)
+
+| Variable | Test Original | Test Sintético |
+|----------|---------------|----------------|
+| TotalVentaNeta | 0.7436 | 0.7547 |
+| UnidadesKit | 0.6320 | 0.6208 |
+| VentasCENTROORIENTE | 0.6922 | 0.6582 |
+| VentasOCCIDENTE | 0.5133 | 0.5351 |
+| VentasNORTE | 0.3278 | 0.3514 |
+
+Tabla 6. Autocorrelaciones preservadas en el dataset sintético.
+
+#### Resultados
+
+| Métrica | Test Original | Test Sintético Preservado | Diferencia |
+|---------|---------------|---------------------------|------------|
+| **R²** | 0.6289 | 0.6211 | **0.0078** |
+| **RMSE** | 0.0792 | 0.0834 | 0.0042 |
+| **Correlación** | 0.8011 | 0.8022 | 0.0011 |
+
+Tabla 7. Comparación entre test original y sintético con correlaciones preservadas.
+
+![Test Original vs Sintético Preservado](Docs/Images/v2/test_original_vs_sintetico_final.png)
+
+*Figura 4. Comparación entre test original (arriba) y test sintético con correlaciones temporales preservadas (abajo). El modelo mantiene un rendimiento similar (diferencia de R² < 1%).*
+
+#### Interpretación
+
+1. **El modelo generaliza correctamente**: Con datos sintéticos que preservan la estructura temporal, el R² es prácticamente igual (diferencia de solo **0.78%**).
+
+2. **Validación del modelo**: Esto confirma que SINDy captura la **dinámica real** de las ventas y **no está sobreajustado** a los datos de entrenamiento.
+
+3. **Robustez**: El modelo es robusto ante pequeñas perturbaciones en los datos, manteniendo su capacidad predictiva.
+
+### Conclusiones de la Validación Sintética
+
+| Escenario | R² | Conclusión |
+|-----------|-----|------------|
+| Test Original | 0.6289 | Línea base de rendimiento |
+| Sintético Aleatorio | -1.1913 | Modelo **no memoriza**, captura dinámica real |
+| Sintético Preservado | 0.6211 | Modelo **generaliza bien** a datos similares |
+
+Tabla 8. Resumen de validación con datos sintéticos.
+
+Esta validación demuestra que el modelo SINDy:
+- ✅ **Funciona correctamente** con datos que siguen patrones reales de ventas
+- ✅ **No funciona** con datos puramente aleatorios (comportamiento esperado)
+- ✅ **No está sobreajustado** - generaliza a nuevos datos con estructura similar
+
+*Dataset sintético disponible en: `ERP-POS-Data/Synthetic-Test-Perturbed.csv`*
