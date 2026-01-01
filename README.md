@@ -200,7 +200,7 @@ Tabla 4. Métricas de rendimiento del modelo v2.
 
 **Correlación de Pearson:**
 - Validación: r = 0.8370 (p-value < 0.001)
-- Test: r = 0.8180 (p-value < 0.001)
+- Test: r = 0.8564 (p-value < 0.001)
 
 ### Resultados Gráficos
 
@@ -212,9 +212,9 @@ Tabla 4. Métricas de rendimiento del modelo v2.
 
 #### Predicción vs Real en Test (2025)
 
-![Test Predicción vs Real](Docs/Images/v2/test_prediction_vs_real.png)
+![Test Predicción vs Real](Docs/Images/v2/test_prediction_vs_real-0_6691.png)
 
-*Figura 2. Comparación detallada entre valores reales y predicciones del modelo SINDy para el conjunto de test (período 2025). Izquierda: serie temporal. Derecha: gráfico de dispersión con correlación r=0.8180.*
+*Figura 2. Comparación detallada entre valores reales y predicciones del modelo SINDy para el conjunto de test (período 2025). Izquierda: serie temporal. Derecha: gráfico de dispersión con correlación r=0.8564.*
 
 ### Conclusiones
 

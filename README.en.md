@@ -205,7 +205,7 @@ Table 4. Performance metrics for model v2.
 
 **Pearson Correlation:**
 - Validation: r = 0.8370 (p-value < 0.001)
-- Test: r = 0.8180 (p-value < 0.001)
+- Test: r = 0.8564 (p-value < 0.001)
 
 ### Graphical Results
 
@@ -217,9 +217,9 @@ Table 4. Performance metrics for model v2.
 
 #### Prediction vs Real in Test (2025)
 
-![Test Prediction vs Real](Docs/Images/v2/test_prediction_vs_real.png)
+![Test Prediction vs Real](Docs/Images/v2/test_prediction_vs_real-0_6691.png)
 
-*Figure 2. Detailed comparison between real values and SINDy model predictions for the test set (2025 period). Left: time series. Right: scatter plot with correlation r=0.8180.*
+*Figure 2. Detailed comparison between real values and SINDy model predictions for the test set (2025 period). Left: time series. Right: scatter plot with correlation r=0.8564.*
 
 ### Conclusions
 
